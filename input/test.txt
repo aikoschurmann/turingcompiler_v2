@@ -1,0 +1,11 @@
+if(a==b){
+    def a = 5;
+} else {
+    if(1 + 2 <= 3 + 4){
+        def b = 5;
+    } else {
+        def c = 6;
+    }
+}
+
+def x = 10 + 20;

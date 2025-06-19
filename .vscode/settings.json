@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "lexer.h": "c",
+        "file.h": "c",
+        "parser.h": "c",
+        "pratt_parse.h": "c"
+    }
+}
