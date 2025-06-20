@@ -20,9 +20,8 @@ A small compiler front‑end for a C‑like “mini‑language.” It performs l
   - Uses POSIX regex for pattern matching.  
 
 - **Parser**  
-  - Pratt‑style expression parsing  
-  - Statement parsing: variable declarations, assignments, `if`/`else`, `while` loops, function definitions, `return` statements, and block grouping.  
-  - Builds a typed AST (`AstNode`), with memory management & cleanup.  
+  - Combination of Recursive Descent and Pratt Parsing
+  - Statement parsing: variable declarations, assignments, `if`/`else`, `while`, function definitions, `return` statements, and block grouping.  
 
 - **AST Output**  
   - Human‑readable tree printer  
@@ -41,7 +40,6 @@ A small compiler front‑end for a C‑like “mini‑language.” It performs l
 - **`token_util.*`** – enum‑to‑string helpers and operator maps (`astnode_type_to_string`, `binaryop_to_string`, `token_type_to_string`, `is_prefix_op`)  
 - **`pratt_parse.*`** – Pratt parser for precedence & infix/prefix operators  
 - **`token.h`** – definitions of `Token`, `TokenType`, and `TokenArray`  
-- **`main.c`** – optional CLI entrypoint  
 
 ---
 
