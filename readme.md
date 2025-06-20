@@ -68,7 +68,7 @@ if (x < 10) {
 
 ```yaml
 Block:
-    Declaration
+    Declaration:
         Variable: x
         IntLiteral: 42
     Function: add
@@ -76,11 +76,11 @@ Block:
             Variable: a
             Variable: b
         Body:
-            ReturnStatement
+            ReturnStatement:
                 BinaryOp: +
                     Variable: a
                     Variable: b
-    IfStatement
+    IfStatement:
         Condition:
             BinaryOp: <
                 Variable: x

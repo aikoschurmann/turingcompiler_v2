@@ -23,11 +23,10 @@ int main(void) {
     free_lexer(lx);
 
     /* 3) print the tokens */
-    for (size_t i = 0; i < tokens.size; i++) {
-        print_token_colored(tokens.data[i]);
-    }
-    printf("\n\n");
-
+    //for (size_t i = 0; i < tokens.size; i++) {
+    //    print_token_colored(tokens.data[i]);
+    //}
+    //printf("\n\n");
 
     dump_tokens_json_file("./compiler-steps/tokens.json", tokens.data, tokens.size);
     

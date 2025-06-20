@@ -56,4 +56,3 @@ void   token_array_push(TokenArray *arr, Token *tok);
 void   token_array_free(TokenArray *arr);
 void   dump_tokens_json_fp(FILE *out, Token **tokens, size_t n);
 void   dump_tokens_json_file(const char *filename, Token **tokens, size_t n);
-void   print_tokens(Token **tokens, size_t n);

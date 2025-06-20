@@ -42,7 +42,7 @@ void print_ast(AstNode *node, int indent)
         break;
 
     case AST_DECLARATION:
-        puts("Declaration");
+        puts("Declaration:");
         print_ast(node->data.declaration.variable, indent + 1);
         print_ast(node->data.declaration.value, indent + 1);
         break;
@@ -63,7 +63,7 @@ void print_ast(AstNode *node, int indent)
         break;
     
     case AST_IF:
-        printf("IfStatement\n");
+        printf("IfStatement:\n");
         print_indent(indent + 1);
         printf("Condition:\n");
         print_ast(node->data.if_stmt.condition, indent + 2);
@@ -88,7 +88,7 @@ void print_ast(AstNode *node, int indent)
         break;
     
     case AST_RETURN:
-        printf("ReturnStatement\n");
+        printf("ReturnStatement:\n");
         print_ast(node->data.return_stmt.expression, indent + 1);
         break;
     

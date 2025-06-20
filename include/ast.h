@@ -86,7 +86,7 @@ typedef struct {
 typedef struct {
     AstNode *name; // Function name
     AstNode *params; // Function parameters
-    AstBlock *body; // Function body
+    AstNode *body; // Function body
 } AstFunction;
 
 typedef struct {
