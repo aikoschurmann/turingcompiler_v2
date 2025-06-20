@@ -2,13 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "lexer.h"
-#include "parser.h"
-#include "file.h"
-#include "parse_statements.h"
-#include "ast_print.h"
-
-
+#include "compiler.h"
 
 int main(void) {
     const char *code = read_file("./input/test.txt");

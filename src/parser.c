@@ -1,7 +1,6 @@
 #include "parser.h"
 #include "parse_error.h"
 
-
 Token *current_token(Parser *p) {
     if (p->current >= p->end) {
         static Token eof = { .type = TOKEN_EOF };
@@ -9,6 +8,7 @@ Token *current_token(Parser *p) {
     }
     return p->tokens.data[p->current];
 }
+
 
 Token *peek(Parser *p, size_t offset) {
     size_t idx = p->current + offset;
