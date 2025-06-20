@@ -51,8 +51,6 @@ You’ll need a C compiler (e.g. `gcc` or `clang`) and POSIX regex support.
 ## Example
 # Example Mini‑Language Program
 
-## Example
-# Example Mini‑Language Program
 
 ```c
 def x = 42;
