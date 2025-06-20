@@ -1,5 +1,5 @@
 #pragma once
-#include <regex.h>
+
 #include "token.h"
 
 // Lexer state

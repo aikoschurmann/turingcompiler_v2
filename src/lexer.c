@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include <regex.h>
 
 // Token classification for keywords
 static const struct { const char *name; TokenType type; } keywords[] = {
@@ -11,6 +12,7 @@ static const struct { const char *name; TokenType type; } keywords[] = {
     {"if",     TOKEN_IF},
     {"else",   TOKEN_ELSE},
     {"return", TOKEN_RETURN},
+    {"while", TOKEN_WHILE},
 };
 static const size_t keyword_count = sizeof(keywords) / sizeof(keywords[0]);
 
@@ -22,6 +24,7 @@ static regex_t re_identifier;
 static regex_t re_number;
 static regex_t re_operator;
 static regex_t re_string;
+static regex_t re_comma;
 static regex_t re_paren_open;
 static regex_t re_paren_close;
 static regex_t re_brace_open;
@@ -36,6 +39,7 @@ static const struct { regex_t *re; TokenType type; } tests[] = {
     {&re_paren_open,   TOKEN_PAREN_OPEN},
     {&re_paren_close,  TOKEN_PAREN_CLOSE},
     {&re_brace_open,   TOKEN_BRACE_OPEN},
+    {&re_comma,        TOKEN_COMMA},
     {&re_brace_close,  TOKEN_BRACE_CLOSE},
     {&re_comparison,   TOKEN_OPERATOR},
     {&re_logical,      TOKEN_LOGICAL},
@@ -60,7 +64,8 @@ void lexer_init_patterns(void) {
         regcomp(&re_comparison,  "^" REGEX_COMPARISON, REG_EXTENDED) != 0 ||
         regcomp(&re_logical,     "^" REGEX_LOGICAL, REG_EXTENDED) != 0 ||
         regcomp(&re_endln,       "^" REGEX_END_OF_LINE, REG_EXTENDED) != 0 ||
-        regcomp(&re_number,     "^" REGEX_NUMBER,     REG_EXTENDED) != 0 ||
+        regcomp(&re_number,      "^" REGEX_NUMBER,     REG_EXTENDED) != 0 ||
+        regcomp(&re_comma,       "^" REGEX_COMMA,       REG_EXTENDED) != 0 ||
         regcomp(&re_operator,   "^" REGEX_OPERATOR,   REG_EXTENDED) != 0) {
         fprintf(stderr, "Failed to compile regex patterns\n");
         exit(EXIT_FAILURE);

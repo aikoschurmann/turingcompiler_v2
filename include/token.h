@@ -2,7 +2,6 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 
 // Token types
@@ -22,9 +21,11 @@ typedef enum {
     TOKEN_PAREN_CLOSE,
     TOKEN_BRACE_OPEN,
     TOKEN_BRACE_CLOSE,
+    TOKEN_COMMA,
     TOKEN_UNKNOWN,
     TOKEN_EOF,
-    TOKEN_END_OF_LINE
+    TOKEN_END_OF_LINE,
+    TOKEN_WHILE
 } TokenType;
 
 

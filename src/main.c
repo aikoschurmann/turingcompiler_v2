@@ -1,11 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "lexer.h"
-#include "file.h"
-#include "parser.h"
 
-#include <stdio.h>
+#include "lexer.h"
+#include "parser.h"
+#include "file.h"
+#include "parse_statements.h"
+#include "ast_print.h"
 
 
 
@@ -37,10 +38,11 @@ int main(void) {
     dump_tokens_json_file("./compiler-steps/tokens.json", tokens.data, tokens.size);
     
     // 3.5) parse the tokens 
-    Parser *parser = parser_create(tokens, "test.txt");
+    Parser *parser = parser_create(tokens, "./input/test.txt");
     AstNode *ast = parse(parser);   
     print_ast(ast, 0);
     printf("\n\n");
+    dump_ast_json_file("./compiler-steps/ast.json", ast);
 
     /* 4) cleanup */
     parser_free(parser);

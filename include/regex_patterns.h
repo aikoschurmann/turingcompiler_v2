@@ -12,3 +12,4 @@
 #define REGEX_BRACE_CLOSE   "[\\}]"
 #define REGEX_COMPARISON    "(==|!=|<=|>=|<|>)"
 #define REGEX_LOGICAL       "(&&|\\|\\|)"
+#define REGEX_COMMA         "[,]"
