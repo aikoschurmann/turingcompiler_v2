@@ -51,6 +51,9 @@ You’ll need a C compiler (e.g. `gcc` or `clang`) and POSIX regex support.
 ## Example
 # Example Mini‑Language Program
 
+## Example
+# Example Mini‑Language Program
+
 ```c
 def x = 42;
 fn add(a, b) {
@@ -60,7 +63,8 @@ if (x < 10) {
     x = add(x, 1);
 } else {
     x = add(x, -1);
-}```
+}
+```
 
 # Output (AST):
 
@@ -95,4 +99,5 @@ Block:
                     Arguments:
                         Variable: x
                         UnaryOp: -
-                            IntLiteral: 1```
+                            IntLiteral: 1
+```
