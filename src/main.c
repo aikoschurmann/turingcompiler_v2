@@ -36,6 +36,7 @@ int main(void) {
     Parser *parser = parser_create(tokens, "./input/test.txt");
     AstNode *ast = parse(parser);   
     print_ast(ast, 0);
+
     printf("\n\n");
     dump_ast_json_file("./compiler-steps/ast.json", ast);
     FILE *out = stdout;

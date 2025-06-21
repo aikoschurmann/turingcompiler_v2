@@ -224,3 +224,4 @@ void dump_ast_json_file(const char *filename, AstNode *root) {
     print_json_fp(out, root);
     if (out != stdout) fclose(out);
 }
+

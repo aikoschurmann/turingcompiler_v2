@@ -53,15 +53,20 @@ AstNode *parse_prefix(Parser *p) {
         }
 
         case TOKEN_OPERATOR: {
-            if (!is_prefix_op(tok->value)) break;
+            // if it's *not* a true prefix op, error right away:
+            if (!is_prefix_op(tok->value)) {
+                parse_error(p, TOKEN_OPERATOR, tok);
+                return NULL;
+            }
 
+            // otherwise handle unary:
             const char *op = tok->value;
             int r_bp = prefix_binding_power(op);
             consume(p, TOKEN_OPERATOR, NULL);
 
             AstNode *operand = parse_expression_pratt(p, r_bp);
             AstNode *node = ast_create_node(AST_UNARY_OP);
-            node->data.unary.op = get_unary_operator(op);
+            node->data.unary.op      = get_unary_operator(op);
             node->data.unary.operand = operand;
             return node;
         }
@@ -112,10 +117,14 @@ int is_prefix_op(const char *op) {
 
 // Prefix binding power (right-binding)
 int prefix_binding_power(const char *op) {
-    if (strcmp(op, "+") == 0 || strcmp(op, "-") == 0) return 5;
-    if (strcmp(op, "!") == 0)                        return 6;
+    if (strcmp(op, "-") == 0)                
+        return 9;
+    if (strcmp(op, "!") == 0)                        
+        return 9;
     return 0;
 }
+
+
 
 // Infix binding powers
 void infix_binding_power(const char *op, int *l_bp, int *r_bp) {
