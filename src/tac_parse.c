@@ -125,20 +125,31 @@ TACInstr *tac_parse_if_statement(AstNode *ast, int *temp_counter) {
 }
 
 TACInstr *tac_parse_assignment(AstNode *ast, int *temp_counter) {
-    // 1) Get the variable operand
+    // 1) Get the LHS variable operand (no code emitted here)
     TACOperand *var;
-    TACInstr *var_code = tac_get_operand(ast->data.assignment.variable, &var, temp_counter);
+    TACInstr    *lhs_code = tac_get_operand(ast->data.assignment.variable,
+                                            &var, temp_counter);
 
-    // 2) Get the value operand
+    // 2) Compute the RHS expression (may emit code, result in 'value')
     TACOperand *value;
-    TACInstr *value_code = tac_get_operand(ast->data.assignment.value, &value, temp_counter);
+    TACInstr   *rhs_code = tac_get_operand(ast->data.assignment.value,
+                                           &value, temp_counter);
 
-    // 3) Emit the copy instruction
-    TACInstr *copy_instr = tac_emit_copy(var, value);
 
-    // 4) Concatenate all parts and return
-    return tac_concat(tac_concat(var_code, value_code), copy_instr);
+    if(!value){
+        TACInstr   *store = tac_emit_copy(var, value);
+        return store;
+    }
+
+    TACInstr *tail = rhs_code;
+    while (tail->next) {
+        tail = tail->next;
+    }
+    tail->dst = var;
+
+    return rhs_code;
 }
+
 
 TACInstr *tac_parse_return(AstNode *ast, int *temp_counter) {
     TACInstr *code = NULL;
@@ -157,7 +168,7 @@ TACInstr *tac_parse_args(AstNode *ast, int *temp_counter) {
     for (size_t i = 0; i < ast->data.params.count; i++) {
         AstNode *param = ast->data.params.params[i];
         TACOperand *param_op = tac_create_operand(TAC_OP_VAR, param->data.variable.identifier, 0);
-        TACInstr *param_instr = tac_emit_param(param_op);
+        TACInstr *param_instr = tac_emit_arg(param_op);
         code = tac_concat(code, param_instr);
     }
     return code;
@@ -254,6 +265,41 @@ TACInstr *tac_parse_while_loop(AstNode *ast, int *temp_counter) {
                       tac_concat(jump_back, label_end_instr));
 }
 
+TACInstr *tac_parse_declaration(AstNode *ast, int *temp_counter) {
+    // 1) Create the variable operand for the new symbol:
+    TACOperand *var = tac_create_operand(
+        TAC_OP_VAR,
+        ast->data.declaration.variable->data.variable.identifier,
+        0
+    );
+
+    // 2) If there is no initializer, just emit a DEFINE with no value:
+    if (!ast->data.declaration.value) {
+        return tac_emit_define(var, NULL);
+    }
+
+    // 3) Otherwise, compute the initializer into a temp and
+    //    then retarget its final dst to our new var:
+    TACOperand *init_val;
+    TACInstr   *init_code = tac_get_operand(
+        ast->data.declaration.value,
+        &init_val,
+        temp_counter
+    );
+
+    // If the initializer was a bare literal/var, tac_get_operand returns NULL
+    // but does give us init_val, so make sure there's at least one instruction:
+    if (!init_code) {
+        // emit a one-off COPY literal/var→temp
+        return tac_emit_define(var, init_val);
+    }
+
+ 
+    TACInstr *def = tac_emit_define(var, init_val);
+    return tac_concat(init_code, def);
+}
+
+
 /* Dispatch based on AST node */
 TACInstr *tac_parse(AstNode *ast, int *temp_counter) {
     switch (ast->type) {
@@ -282,7 +328,7 @@ TACInstr *tac_parse(AstNode *ast, int *temp_counter) {
         case AST_WHILE:
             return tac_parse_while_loop(ast, temp_counter);
         case AST_DECLARATION:
-            return tac_parse_assignment(ast, temp_counter);
+            return tac_parse_declaration(ast, temp_counter);
 
         
         /* future AST cases: ASSIGN, CALL, IF, WHILE, etc. */

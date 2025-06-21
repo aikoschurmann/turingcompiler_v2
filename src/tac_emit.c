@@ -87,7 +87,16 @@ TACInstr *tac_emit_ifz(TACOperand *arg1, TACOperand *arg2) {
 TACInstr *tac_emit_param(TACOperand *arg1) {
     TACInstr *instr = malloc(sizeof(TACInstr));
     if (!instr) return NULL; // Handle memory allocation failure
-    instr->kind = TAC_PARAM;
+    instr->kind = TAC_PUSH;
+    instr->dst = NULL; // Param does not have a destination
+    instr->arg1 = arg1; // The first argument is the parameter to pass
+    instr->arg2 = NULL; // Param does not have a second argument
+    return instr;
+}
+TACInstr *tac_emit_arg(TACOperand *arg1) {
+    TACInstr *instr = malloc(sizeof(TACInstr));
+    if (!instr) return NULL; // Handle memory allocation failure
+    instr->kind = TAC_POP;
     instr->dst = NULL; // Param does not have a destination
     instr->arg1 = arg1; // The first argument is the parameter to pass
     instr->arg2 = NULL; // Param does not have a second argument

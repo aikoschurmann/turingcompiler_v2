@@ -22,7 +22,8 @@ typedef enum {
     TAC_LABEL,        // label:
     TAC_GOTO,         // goto label
     TAC_IFZ,          // ifz cond goto label
-    TAC_PARAM,        // param x
+    TAC_PUSH,
+    TAC_POP,          // push/pop for stack management
     TAC_CALL,         // t = call f, n_args
     TAC_RETURN,       // return t or return
     TAC_FUNCTION,     // fun name

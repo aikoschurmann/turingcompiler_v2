@@ -16,8 +16,10 @@ TACInstr *tac_emit_goto(TACOperand *arg1);
 // t0 = a < b
 // ifz t0 goto label
 TACInstr *tac_emit_ifz(TACOperand *arg1, TACOperand *arg2);
-// param x
+// push x
 TACInstr *tac_emit_param(TACOperand *arg1);
+// pop x
+TACInstr *tac_emit_arg(TACOperand *arg1);
 // t = call f, n_args
 TACInstr *tac_emit_call(TACOperand *dst, TACOperand *arg1, int n_args);
 // return t or return

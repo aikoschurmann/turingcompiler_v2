@@ -191,27 +191,26 @@ Block:
 
 ```c
    1: fun factorial:
-   2:   param n
-   3:   result ← 1
-   4:   i ← 1
+   2:   pop n
+   3:   define result = 1
+   4:   define i = 1
    5:   L0:
    6:   t1 ← i <= n
    7:   ifz t1 goto L2
-   8:     t3 ← result * i
-   9:     result ← t3
-  10:     t4 ← i + 1
-  11:     i ← t4
-  12:     goto L0
-  13:   L2:
-  14:   t5 ← result
-  15:   return t5
-  16: endfun
-  17: fun main:
-  18:   n ← 5
-  19:   param n
-  20:   t6 ← call factorial 1
-  21:   res ← t6
-  22:   t7 ← res
-  23:   return t7
-  24: endfun
+   8:     result ← result * i
+   9:     i ← i + 1
+  10:     goto L0
+  11:   L2:
+  12:   t5 ← result
+  13:   return t5
+  14: endfun
+
+  15: fun main:
+  16:   define n = 5
+  17:   push n
+  18:   t6 ← call factorial 1
+  19:   define res = t6
+  20:   t7 ← res
+  21:   return t7
+  22: endfun
 ```

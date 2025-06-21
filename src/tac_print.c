@@ -73,8 +73,13 @@ void tac_print_instr(const TACInstr *p) {
             printf("fun <?>:\n");
         break;
 
-      case TAC_PARAM:
-        printf("param ");
+      case TAC_PUSH:
+        printf("push ");
+        tac_print_operand(p->arg1);
+        printf("\n");
+        break;
+      case TAC_POP:
+        printf("pop ");
         tac_print_operand(p->arg1);
         printf("\n");
         break;
@@ -87,8 +92,23 @@ void tac_print_instr(const TACInstr *p) {
         break;
 
       case TAC_END_FUNCTION:
-        printf("endfun\n");
+        printf("endfun\n\n");
         break;
+      case TAC_DEFINE:
+          if (p->dst) {
+              printf("define %s", p->dst->name);
+              if (p->arg1) {
+                  // print the initial value
+                  printf(" = ");
+                  tac_print_operand(p->arg1);
+              }
+              printf("\n");
+          } else {
+              printf("define <?>\n");
+          }
+          break;
+
+      
 
       default:
         printf("; [unrecognized TAC kind %d]\n", p->kind);
