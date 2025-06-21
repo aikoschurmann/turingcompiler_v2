@@ -40,6 +40,7 @@ const char *token_type_to_string(TokenType t) {
         case TOKEN_UNKNOWN:     return "UNKNOWN";
         case TOKEN_EOF:         return "EOF";
         case TOKEN_END_OF_LINE: return "EOL";
+        case TOKEN_WHILE:        return "WHILE";
     }
     return "<?>";
 }

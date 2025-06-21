@@ -91,7 +91,7 @@ fn main() {
 <OPERATOR> "=" 5:11
 <NUMBER> "1" 5:13
 <EOL> ";" 5:14
-<<?>> "while" 7:5
+<WHILE> "while" 7:5
 <PAREN_OPEN> "(" 7:11
 <IDENTIFIER> "i" 7:12
 <OPERATOR> "<=" 7:14
