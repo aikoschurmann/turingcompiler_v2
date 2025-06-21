@@ -73,7 +73,7 @@ fn main() {
 }
 
 ```
-# Output (TOKENS):
+# Output (LEX):
 ```c
 <FUNCTION> "fn" 1:1
 <IDENTIFIER> "factorial" 1:4
