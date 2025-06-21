@@ -231,8 +231,9 @@ AstNode *parse_operator(Parser *p)
 }
 
 AstNode *parse_return_statement(Parser *p)
-{
+{   
     consume(p, TOKEN_RETURN, NULL);
+    
     AstNode *return_node = ast_create_node(AST_RETURN);
 
     if (current_token(p)->type != TOKEN_END_OF_LINE) {

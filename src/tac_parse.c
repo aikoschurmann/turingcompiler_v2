@@ -210,7 +210,6 @@ TACInstr *tac_parse_call(AstNode *ast, int *temp_counter) {
     return tac_concat(args_code, call_instr);
 }
 
-
 TACInstr *tac_parse_parameters(AstNode *ast, int *temp_counter) {
     TACInstr *code = NULL;
     for (size_t i = 0; i < ast->data.params.count; i++) {
@@ -292,5 +291,3 @@ TACInstr *tac_parse(AstNode *ast, int *temp_counter) {
             return NULL;
     }
 }
-
-

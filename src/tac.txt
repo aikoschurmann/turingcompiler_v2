@@ -1,0 +1,38 @@
+x = 42
+
+fun add:
+param a
+param b
+
+t0 = a + b
+
+return t0
+
+endfun
+
+
+t1 = x < 10
+ifz t1 goto L2
+
+param x
+param 1
+t4 = call add 2
+x = t4
+
+push pc
+push x
+push 1
+goto [add]
+x = eax
+
+goto L3
+
+L2:
+
+param x
+t5 = -1
+param t5
+t6 = call add 2
+x = t6
+
+L3:
