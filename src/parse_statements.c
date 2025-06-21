@@ -130,7 +130,6 @@ AstNode *parse_while_loop(Parser *p)
     Parser body_parser = parser_slice(p, p->current, body_end);
     
     AstNode *body_block = parse(&body_parser);
-    parser_free(&body_parser);
     p->current = body_end;
     consume(p, TOKEN_BRACE_CLOSE, NULL);
 
@@ -205,7 +204,9 @@ AstNode *parse_identifier(Parser *p) {
     }
 
     if (next && next->type == TOKEN_PAREN_OPEN) {
-       return parse_expression(p);
+       AstNode *res = parse_expression(p);
+       consume(p, TOKEN_END_OF_LINE, NULL);
+       return res;
     }
 
     AstNode *expr = parse_expression(p);
@@ -232,17 +233,23 @@ AstNode *parse_operator(Parser *p)
 AstNode *parse_return_statement(Parser *p)
 {
     consume(p, TOKEN_RETURN, NULL);
-    AstNode *return_expr = parse_expression(p);
-    
-
     AstNode *return_node = ast_create_node(AST_RETURN);
-    return_node->data.return_stmt.expression = return_expr;
 
+    if (current_token(p)->type != TOKEN_END_OF_LINE) {
+        return_node->data.return_stmt.expression = parse_expression(p);
+    } else {
+        return_node->data.return_stmt.expression = NULL;
+    }
+
+    consume(p, TOKEN_END_OF_LINE, NULL);
     return return_node;
 }
 
 AstNode *parse_number(Parser *p)
-{
+{   Token *next = peek(p, 1);
+    if (next && next->type == TOKEN_OPERATOR && next->value[0] == '=') {
+        parse_error(p, TOKEN_OPERATOR, next);
+    }
     AstNode *exp = parse_expression_pratt(p, 0);
     consume(p, TOKEN_END_OF_LINE, NULL);
     return exp;
@@ -261,7 +268,6 @@ AstNode *parse_block(Parser *p)
     return block;
 
 }
-
 
 AstNode *parse_parameters(Parser *p) {
     AstNode *params_node = ast_param_list_create();
@@ -350,12 +356,7 @@ AstNode *parse_statement(Parser *p)
             return NULL;
         case TOKEN_FUNCTION:
             return parse_function_definition(p);
-            
-
-        
-
-        
-        
+                    
         default:
             parse_error(p, TOKEN_DEFINE, current_token(p));
             return NULL;  // unreachable

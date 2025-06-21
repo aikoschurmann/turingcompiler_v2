@@ -3,6 +3,13 @@
         "lexer.h": "c",
         "file.h": "c",
         "parser.h": "c",
-        "pratt_parse.h": "c"
+        "pratt_parse.h": "c",
+        "stdlib.h": "c",
+        "regex_patterns.h": "c",
+        "string.h": "c",
+        "tac_parse.h": "c",
+        "ast.h": "c",
+        "stdio.h": "c",
+        "compiler.h": "c"
     }
 }

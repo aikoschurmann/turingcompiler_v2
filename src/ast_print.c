@@ -10,104 +10,107 @@ static void print_indent(int level)
     }
 }
 
-void print_ast(AstNode *node, int indent)
-{
+
+// Helper to print a list of AstNodes
+void print_list(AstNode *items[], size_t count, int indent) {
+    for (size_t i = 0; i < count; ++i) {
+        print_ast(items[i], indent);
+    }
+}
+
+void print_ast(AstNode *node, int indent) {
     if (!node) return;
     print_indent(indent);
+    
     switch (node->type) {
-    case AST_BLOCK:
-        printf("Block:\n");
-        for (size_t i = 0; i < node->data.block.count; i++)
-            print_ast(node->data.block.statements[i], indent + 1);
-        break;
-
-    case AST_VARIABLE:
-        printf("Variable: %s\n", node->data.variable.identifier);
-        break;
-
-    case AST_LITERAL:
-        printf("IntLiteral: %d\n", node->data.literal.value);
-        break;
-
-    case AST_BINARY_OP:
-        printf("BinaryOp: %s\n",
-               binaryop_to_string(node->data.binary.op));
-        print_ast(node->data.binary.left, indent + 1);
-        print_ast(node->data.binary.right, indent + 1);
-        break;
-
-    case AST_UNARY_OP:
-        printf("UnaryOp: %c\n", node->data.unary.op);
-        print_ast(node->data.unary.operand, indent + 1);
-        break;
-
-    case AST_DECLARATION:
-        puts("Declaration:");
-        print_ast(node->data.declaration.variable, indent + 1);
-        print_ast(node->data.declaration.value, indent + 1);
-        break;
-
-    case AST_ASSIGNMENT:
-        printf("Assignment: %s\n",
-               node->data.assignment.variable->data.variable.identifier);
-        print_ast(node->data.assignment.value, indent + 1);
-        break;
-
-    case AST_CALL:
-        printf("Call: %s\n", node->data.call.callee->data.variable.identifier);
-        print_indent(indent + 1);
-        printf("Arguments:\n");
-        for (size_t i = 0; i < node->data.call.args->data.args.count; i++) {
-            print_ast(node->data.call.args->data.args.arguments[i], indent + 2);
+        case AST_BLOCK: {
+            puts("Block:");
+            print_list((const AstNode *const *)node->data.block.statements,
+                       node->data.block.count,
+                       indent + 1);
+            break;
         }
-        break;
-    
-    case AST_IF:
-        printf("IfStatement:\n");
-        print_indent(indent + 1);
-        printf("Condition:\n");
-        print_ast(node->data.if_stmt.condition, indent + 2);
-        print_indent(indent + 1);
-        printf("ThenBlock:\n");
-        print_ast((AstNode *)node->data.if_stmt.then_block, indent + 2);
-        if (node->data.if_stmt.else_block) {
+
+        case AST_VARIABLE:
+            printf("Variable: %s\n", node->data.variable.identifier);
+            break;
+
+        case AST_LITERAL:
+            printf("IntLiteral: %d\n", node->data.literal.value);
+            break;
+
+        case AST_BINARY_OP:
+            printf("BinaryOp: %s\n", binaryop_to_string(node->data.binary.op));
+            print_ast(node->data.binary.left,  indent + 1);
+            print_ast(node->data.binary.right, indent + 1);
+            break;
+
+        case AST_UNARY_OP:
+            printf("UnaryOp: %s\n", unarop_to_string(node->data.unary.op));
+            print_ast(node->data.unary.operand, indent + 1);
+            break;
+
+        case AST_DECLARATION:
+            puts("Declaration:");
+            print_ast(node->data.declaration.variable, indent + 1);
+            print_ast(node->data.declaration.value,    indent + 1);
+            break;
+
+        case AST_ASSIGNMENT:
+            printf("Assignment: %s\n",
+                   node->data.assignment.variable->data.variable.identifier);
+            print_ast(node->data.assignment.value, indent + 1);
+            break;
+
+        case AST_CALL: {
+            printf("Call: %s\n",
+                   node->data.call.callee->data.variable.identifier);
             print_indent(indent + 1);
-            printf("ElseBlock:\n");
-            print_ast((AstNode *)node->data.if_stmt.else_block, indent + 2);
+            puts("Arguments:");
+            print_list(node->data.call.args->data.args.arguments,
+                       node->data.call.args->data.args.count,
+                       indent + 2);
+            break;
         }
-        break;
-    
-    case AST_WHILE:
-        printf("WhileLoop\n");
-        print_indent(indent + 1);
-        printf("Condition:\n");
-        print_ast(node->data.while_loop.condition, indent + 2);
-        print_indent(indent + 1);
-        printf("Body:\n");
-        print_ast((AstNode *)node->data.while_loop.body, indent + 2);
-        break;
-    
-    case AST_RETURN:
-        printf("ReturnStatement:\n");
-        print_ast(node->data.return_stmt.expression, indent + 1);
-        break;
-    
-    case AST_FUNCTION:
-        printf("Function: %s\n", node->data.function.name->data.variable.identifier);
-        print_indent(indent + 1);
-        printf("Parameters:\n");
-        for (size_t i = 0; i < node->data.function.params->data.params.count; i++) {
-            print_ast(node->data.function.params->data.params.params[i], indent + 2);
-        }
-        print_indent(indent + 1);
-        printf("Body:\n");
-        print_ast((AstNode *)node->data.function.body, indent + 2);
-        break;
 
+        case AST_IF:
+            puts("IfStatement:");
+            print_indent(indent + 1); puts("Condition:");
+            print_ast(node->data.if_stmt.condition, indent + 2);
+            print_indent(indent + 1); puts("ThenBlock:");
+            print_ast(node->data.if_stmt.then_block, indent + 2);
+            if (node->data.if_stmt.else_block) {
+                print_indent(indent + 1); puts("ElseBlock:");
+                print_ast(node->data.if_stmt.else_block, indent + 2);
+            }
+            break;
 
-    default:
-        printf("<Unknown AST node: %s>\n", astnode_type_to_string(node->type));
-        break;
+        case AST_WHILE:
+            puts("WhileLoop:");
+            print_indent(indent + 1); puts("Condition:");
+            print_ast(node->data.while_loop.condition, indent + 2);
+            print_indent(indent + 1); puts("Body:");
+            print_ast(node->data.while_loop.body, indent + 2);
+            break;
+
+        case AST_RETURN:
+            puts("ReturnStatement:");
+            print_ast(node->data.return_stmt.expression, indent + 1);
+            break;
+
+        case AST_FUNCTION:
+            printf("Function: %s\n", node->data.function.name->data.variable.identifier);
+            print_indent(indent + 1); puts("Parameters:");
+            print_list((const AstNode *const *)node->data.function.params->data.params.params,
+                       node->data.function.params->data.params.count,
+                       indent + 2);
+            print_indent(indent + 1); puts("Body:");
+            print_ast(node->data.function.body, indent + 2);
+            break;
+
+        default:
+            printf("<Unknown AST node: %s>\n", astnode_type_to_string(node->type));
+            break;
     }
 }
 

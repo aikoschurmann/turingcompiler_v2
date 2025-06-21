@@ -35,3 +35,12 @@ char *binaryop_to_string(BinaryOp op)
         default:     return "UNKNOWN_BINARY_OP";
     }
 }
+
+char *unarop_to_string(UnaryOp op)
+{
+    switch (op) {
+        case UN_OP_NEG: return "-";
+        case UN_OP_NOT: return "!";
+        default:        return "UNKNOWN_UNARY_OP";
+    }
+}

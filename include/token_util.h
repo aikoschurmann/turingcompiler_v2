@@ -3,3 +3,4 @@
 
 char *astnode_type_to_string(AstNodeType type);
 char *binaryop_to_string(BinaryOp op);
+char *unarop_to_string(UnaryOp op);

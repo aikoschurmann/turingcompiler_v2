@@ -38,7 +38,8 @@ void parse_error(const Parser *parser,
             actual->column);
 
     // Print the line of code where the error occurred
-    fprintf(stderr, "    %s", line_str);
+    fprintf(stderr, "    %s\n", line_str);
+
 
     // Print a caret pointing to the error column
     fprintf(stderr, "    ");

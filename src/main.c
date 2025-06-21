@@ -3,6 +3,8 @@
 #include <string.h>
 
 #include "compiler.h"
+#include "token_util.h"
+
 
 int main(void) {
     const char *code = read_file("./input/test.txt");
@@ -23,10 +25,10 @@ int main(void) {
     free_lexer(lx);
 
     /* 3) print the tokens */
-    //for (size_t i = 0; i < tokens.size; i++) {
-    //    print_token_colored(tokens.data[i]);
-    //}
-    //printf("\n\n");
+    for (size_t i = 0; i < tokens.size; i++) {
+        print_token_colored(tokens.data[i]);
+    }
+    printf("\n\n");
 
     dump_tokens_json_file("./compiler-steps/tokens.json", tokens.data, tokens.size);
     
@@ -36,6 +38,12 @@ int main(void) {
     print_ast(ast, 0);
     printf("\n\n");
     dump_ast_json_file("./compiler-steps/ast.json", ast);
+    FILE *out = stdout;
+
+    int temp_counter = 0;
+    TACInstr *instr = tac_parse(ast, &temp_counter);
+    tac_print_list(instr);
+
 
     /* 4) cleanup */
     parser_free(parser);

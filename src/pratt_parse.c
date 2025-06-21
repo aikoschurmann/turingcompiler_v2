@@ -17,6 +17,12 @@ BinaryOp get_binary_operator(const char *op) {
     else parse_error(NULL, TOKEN_OPERATOR, NULL);
 }
 
+UnaryOp get_unary_operator(const char *op) {
+    if      (strcmp(op, "-") == 0) return UN_OP_NEG;
+    else if (strcmp(op, "!") == 0) return UN_OP_NOT;
+    else parse_error(NULL, TOKEN_OPERATOR, NULL);
+}
+
 // Entry point for Pratt parsing
 AstNode *parse_expression_pratt(Parser *p, int min_bp) {
     AstNode *lhs = parse_prefix(p);
@@ -55,7 +61,7 @@ AstNode *parse_prefix(Parser *p) {
 
             AstNode *operand = parse_expression_pratt(p, r_bp);
             AstNode *node = ast_create_node(AST_UNARY_OP);
-            node->data.unary.op = op[0]; // Assuming single-char prefix ops
+            node->data.unary.op = get_unary_operator(op);
             node->data.unary.operand = operand;
             return node;
         }

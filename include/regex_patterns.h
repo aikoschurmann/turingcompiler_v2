@@ -4,7 +4,7 @@
 #define REGEX_WHITESPACE    "[ \t\r]+"
 #define REGEX_IDENTIFIER    "[A-Za-z_][A-Za-z0-9_]*"
 #define REGEX_NUMBER        "[0-9]+"
-#define REGEX_OPERATOR      "[=+*/-]"
+#define REGEX_OPERATOR      "[=!+*/\\-]"
 #define REGEX_END_OF_LINE   "[;]"
 #define REGEX_PAREN_OPEN    "[\\(]"
 #define REGEX_PAREN_CLOSE   "[\\)]"
