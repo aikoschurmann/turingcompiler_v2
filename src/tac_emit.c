@@ -139,6 +139,15 @@ TACInstr *tac_emit_end_function(void) {
     return instr;
 }
 
+TACInstr *tac_emit_define(TACOperand *dst, TACOperand *arg1) {
+    TACInstr *instr = malloc(sizeof(TACInstr));
+    if (!instr) return NULL; // Handle memory allocation failure
+    instr->kind = TAC_DEFINE;
+    instr->dst = dst; // The destination for the defined variable
+    instr->arg1 = arg1; // The argument to define, can be NULL
+    instr->arg2 = NULL; // Define does not have a second argument
+    return instr;
+}
 void tac_free_operand(TACOperand *operand) {
     if (operand) {
         if (operand->name) {

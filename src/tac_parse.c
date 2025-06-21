@@ -282,6 +282,8 @@ TACInstr *tac_parse(AstNode *ast, int *temp_counter) {
             return tac_parse_parameters(ast, temp_counter);
         case AST_WHILE:
             return tac_parse_while_loop(ast, temp_counter);
+        case AST_DECLARATION:
+            return tac_parse_assignment(ast, temp_counter);
 
         
         /* future AST cases: ASSIGN, CALL, IF, WHILE, etc. */

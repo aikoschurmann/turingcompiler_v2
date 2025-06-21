@@ -26,6 +26,8 @@ TACInstr *tac_emit_return(TACOperand *arg1);
 TACInstr *tac_emit_function(TACOperand *dst);
 // End of function definition
 TACInstr *tac_emit_end_function(void);
+// Define a new variable or temporary
+TACInstr *tac_emit_define(TACOperand *dst, TACOperand *arg1);
 
 void tac_free_operand(TACOperand *operand);
 

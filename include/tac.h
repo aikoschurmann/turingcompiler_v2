@@ -26,7 +26,8 @@ typedef enum {
     TAC_CALL,         // t = call f, n_args
     TAC_RETURN,       // return t or return
     TAC_FUNCTION,     // fun name
-    TAC_END_FUNCTION  // End of function definition
+    TAC_END_FUNCTION, // End of function definition
+    TAC_DEFINE
 } TACOpKind;
 
 typedef enum {
