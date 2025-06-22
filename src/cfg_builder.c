@@ -64,15 +64,6 @@ CFG *build_from_tac(TACInstr *tac) {
         cursor = next;
     }
 
-    // Catch the last block if it wasn’t terminated (e.g., a fall-through)
-    //if (block_start) {
-    //    CFGBlock *block = create_block_from_range(cfg, block_start, NULL, block_id++);
-    //    if (!block) {
-    //        free_cfg(cfg);
-    //        return NULL;
-    //    }
-    //}
-
     return cfg;
 }
 
