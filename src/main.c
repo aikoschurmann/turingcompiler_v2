@@ -43,7 +43,10 @@ int main(void) {
 
     int temp_counter = 0;
     TACInstr *instr = tac_parse(ast, &temp_counter);
-    tac_print_list(instr);
+    //tac_print_list(instr);
+
+    CFG *cfg = build_from_tac(instr);
+    print_cfg(cfg);
 
 
     /* 4) cleanup */

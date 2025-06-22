@@ -9,3 +9,5 @@
 #include "tac_emit.h"
 #include "tac_parse.h"
 #include "tac_print.h"
+#include "cfg.h"
+#include "cfg_builder.h"

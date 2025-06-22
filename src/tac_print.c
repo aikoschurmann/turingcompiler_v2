@@ -148,15 +148,12 @@ void tac_print_list(TACInstr *head) {
             indent_level--;
         }
 
-
-
-        
         if (p->kind == TAC_END_FUNCTION) {
             indent_level--;
         }
 
         /* Print line number and indent */
-        printf("%4d: ", lineno);
+        printf("%d: ", lineno);
         for (int i = 0; i < indent_level; ++i)
             printf("  ");
 

@@ -194,8 +194,6 @@ AstNode *parse_function_call(Parser *p) {
     return call_node;
 }
 
-
-
 AstNode *parse_identifier(Parser *p) {
     Token *next = peek(p, 1);
 

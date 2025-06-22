@@ -131,12 +131,13 @@ TACInstr *tac_parse_assignment(AstNode *ast, int *temp_counter) {
                                             &var, temp_counter);
 
     // 2) Compute the RHS expression (may emit code, result in 'value')
-    TACOperand *value;
+    TACOperand *value = NULL;
     TACInstr   *rhs_code = tac_get_operand(ast->data.assignment.value,
                                            &value, temp_counter);
 
-
-    if(!value){
+    
+    // 3) If the RHS is a literal, we can emit a copy directly
+    if(!rhs_code){
         TACInstr   *store = tac_emit_copy(var, value);
         return store;
     }
