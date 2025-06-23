@@ -67,3 +67,62 @@ CFG *build_from_tac(TACInstr *tac) {
     return cfg;
 }
 
+CFG *extract_functions(TACInstr *tac) {
+    CFG *cfg = create_cfg();
+    if (!cfg) {
+        fprintf(stderr, "Failed to create CFG.\n");
+        return NULL;
+    }
+
+    int id = 0;
+    TACInstr *cursor = tac;
+    TACInstr *seg_start = tac;
+    TACInstr *prev = NULL;
+    int depth = 0;
+
+
+    while (cursor) {
+        switch (cursor->kind) {
+            case TAC_FUNCTION:
+                // Close previous segment (global code or enclosing function body)
+                if (seg_start && seg_start != cursor && depth == 0) {
+                    if (!create_block_from_range(cfg, seg_start, prev, id++)) {
+                        free_cfg(cfg);
+                        return NULL;
+                    }
+                }
+                depth++;
+                // Start new segment
+                seg_start = cursor;
+                break;
+
+            case TAC_END_FUNCTION:
+                depth--;
+                if (depth < 0) {
+                    fprintf(stderr, "END_FUNCTION without matching FUNCTION.\n");
+                    free_cfg(cfg);
+                    return NULL;
+                }
+                // Close the function or nested function body
+                if (seg_start && seg_start != cursor && depth == 0) {
+                    if (!create_block_from_range(cfg, seg_start, cursor, id++)) {
+                        free_cfg(cfg);
+                        return NULL;
+                    }
+                    // Next segment starts after
+                    seg_start = cursor->next;
+                }
+   
+                break;
+
+            default:
+                // Regular instruction, continue
+                break;
+        }
+        prev = cursor;
+        cursor = cursor->next;
+    }
+
+
+    return cfg;
+}

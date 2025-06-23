@@ -1,18 +1,15 @@
-fn factorial(n) {
-    def result = 1;
-    def i = 1;
+fn outer(x) {
+  def y = x + 1;
 
-    while (i <= n) {
-        result = result * i;
-        i = i + 1;
-    }
+  fn inner(a) {
+    return a * 2;
+  }
 
-    return result;
+  if (y > 10) {
+    return inner(y);
+  } else {
+    return y;
+  }
 }
 
-fn main() {
-    def n = 5;
-    def res = factorial(n);
 
-    return res;
-}

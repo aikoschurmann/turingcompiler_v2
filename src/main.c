@@ -25,17 +25,17 @@ int main(void) {
     free_lexer(lx);
 
     /* 3) print the tokens */
-    for (size_t i = 0; i < tokens.size; i++) {
-        print_token_colored(tokens.data[i]);
-    }
-    printf("\n\n");
+    //for (size_t i = 0; i < tokens.size; i++) {
+    //    print_token_colored(tokens.data[i]);
+    //}
+    //printf("\n\n");
 
     dump_tokens_json_file("./compiler-steps/tokens.json", tokens.data, tokens.size);
     
     // 3.5) parse the tokens 
     Parser *parser = parser_create(tokens, "./input/test.txt");
     AstNode *ast = parse(parser);   
-    print_ast(ast, 0);
+    //print_ast(ast, 0);
 
     printf("\n\n");
     dump_ast_json_file("./compiler-steps/ast.json", ast);
@@ -44,9 +44,10 @@ int main(void) {
     int temp_counter = 0;
     TACInstr *instr = tac_parse(ast, &temp_counter);
     //tac_print_list(instr);
-
-    CFG *cfg = build_from_tac(instr);
-    print_cfg(cfg);
+    CFG *cfg2 = extract_functions(instr);
+    print_cfg(cfg2);
+    //CFG *cfg = build_from_tac(instr);
+    //print_cfg(cfg);
 
 
     /* 4) cleanup */

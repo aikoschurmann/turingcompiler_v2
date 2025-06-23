@@ -153,15 +153,28 @@ TACInstr *tac_parse_assignment(AstNode *ast, int *temp_counter) {
 
 
 TACInstr *tac_parse_return(AstNode *ast, int *temp_counter) {
-    TACInstr *code = NULL;
-    TACOperand *ret_op = NULL;
-    if (ast->data.return_stmt.expression) {
-        code = tac_parse(ast->data.return_stmt.expression, temp_counter);
-        TACInstr *last = code; while (last->next) last = last->next;
-        ret_op = last->dst;
+
+    // 2) Compute the RHS expression (may emit code, result in 'value')
+    TACOperand *value = NULL;
+    TACInstr   *rhs_code = tac_get_operand(ast->data.return_stmt.expression,
+                                           &value, temp_counter);
+
+    
+    // 3) If the RHS is a literal, we can emit a copy directly
+    if(!rhs_code){
+        TACInstr   *store = tac_emit_return(value);
+        return store;
     }
-    TACInstr *ret = tac_emit_return(ret_op);
-    return tac_concat(code, ret);
+
+    TACInstr *tail = rhs_code;
+    while (tail->next) {
+        tail = tail->next;
+    }
+    tail->dst =  tac_create_operand(TAC_OP_TEMP, NULL, (*temp_counter)++);
+
+    return rhs_code;
+    
+
 }
 
 TACInstr *tac_parse_args(AstNode *ast, int *temp_counter) {
